@@ -33,12 +33,17 @@ class App extends Component {
      this.setState({ todos: todos});
    }
 
-   render() { //this is where we are actually rending the data to the UI
+    deleteTodo(index) {
+      const todos = this.state.todos.slice();
+      this.setState( {todos: this.state.todos.filter((todo, todoIndex) => todoIndex !== index) });
+    }
+
+   render() {
      return (
        <div className="App">
          <ul>
            { this.state.todos.map( (todo, index) => //We are using .map() to iterate over the todos array and return a new array
-             <ToDo key={ index } description={ todo.description } isCompleted={ todo.isCompleted } toggleComplete={ () => this.toggleComplete(index) } />
+             <ToDo key={ index } description={ todo.description } isCompleted={ todo.isCompleted } toggleComplete={ () => this.toggleComplete(index) } deleteTodo={ () => this.deleteTodo(index) } />
              //we are using this line to pass the data down to our ToDo component-toggleComplete function
            )}
          </ul>
