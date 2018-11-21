@@ -16,13 +16,13 @@ class App extends Component {
    }
 
    handleChange(e) {
-     this.setState({ newToDoDescription: e.target.value })
+     this.setState({ newTodoDescription: e.target.value })
    }
 
    handleSubmit(e){
-     e.preventDefault();//prevents the default page from reloading on user submit
+     e.preventDefault();
       if (!this.state.newTodoDescription) { return }
-     const newTodo = { description: this.state.newToDoDescription, isCompleted: false };
+     const newTodo = { description: this.state.newTodoDescription, isCompleted: false };
       this.setState({ todos: [...this.state.todos, newTodo], newTodoDescription: '' }); //Here we are creating a new item in our todo array
    } //...is JavaScript spread syntax to add an object to the end of a new array
 
@@ -32,24 +32,28 @@ class App extends Component {
      todo.isCompleted = todo.isCompleted ? false : true;
      this.setState({ todos: todos});
    }
+   deleteTodo(index) {
+         const todos = this.state.todos.slice();
+         this.setState( {todos: this.state.todos.filter((todo, todoIndex) => todoIndex !== index) });
+       }
 
-   render() { //this is where we are actually rending the data to the UI
-     return (
-       <div className="App">
-         <ul>
-           { this.state.todos.map( (todo, index) => //We are using .map() to iterate over the todos array and return a new array
-             <ToDo key={ index } description={ todo.description } isCompleted={ todo.isCompleted } toggleComplete={ () => this.toggleComplete(index) } />
-             //we are using this line to pass the data down to our ToDo component-toggleComplete function
-           )}
-         </ul>
-         <form onSubmit={ (e) => this.handleSubmit(e) }>
-          <input type="text" value={ this.state.newToDoDescription } onChange={ (e) => this.handleChange(e) } />
-          <input type="submit" />
-         </form>
-       </div>
-     );//e is short for event, and it contains event data passed to the function by the browser
-     //props look like HTML attributes w/ a key and a value separated by an equal sign
-   }
- }
+      render() {
+        return (
+          <div className="App">
+            <ul>
+              { this.state.todos.map( (todo, index) => //We are using .map() to iterate over the todos array and return a new array
+                <ToDo key={ index } description={ todo.description } isCompleted={ todo.isCompleted } toggleComplete={ () => this.toggleComplete(index) } deleteTodo={ () => this.deleteTodo(index) } />
+                //we are using this line to pass the data down to our ToDo component-toggleComplete function
+              )}
+            </ul>
+            <form onSubmit={ (e) => this.handleSubmit(e) }>
+             <input type="text" value={ this.state.newTodoDescription } onChange={ (e) => this.handleChange(e) } />
+             <input type="submit" />
+            </form>
+          </div>
+        );//e is short for event, and it contains event data passed to the function by the browser
+        //props look like HTML attributes w/ a key and a value separated by an equal sign
+      }
+    }
 
-export default App;
+   export default App;
